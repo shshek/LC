@@ -1,0 +1,22 @@
+public class Solution {
+    public void MoveZeroes(int[] nums) {
+        if(nums.Length < 2)
+            return;
+        
+        //Maintain two pointers
+        int i = 0; 
+        int idx = 0;
+        
+        while(i < nums.Length && idx < nums.Length)
+        {
+            if(nums[i] != 0)
+            {
+                int temp = nums[idx];
+                nums[idx] = nums[i];
+                nums[i] = temp;
+                idx++;
+            }
+            i++;
+        }
+    }
+}
