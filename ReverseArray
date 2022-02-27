@@ -1,0 +1,20 @@
+public class Solution {
+    public void Rotate(int[] nums, int k) {
+        k = k%nums.Length;
+        
+        ReverseArray(nums, 0, nums.Length-1);
+        ReverseArray(nums, 0, k-1);
+        ReverseArray(nums, k, nums.Length-1);
+    }
+    
+    public void ReverseArray(int[] nums, int l, int r)
+    {
+        while(l < r)
+        {
+            int temp = nums[l];
+            nums[l] = nums[r];
+            nums[r] = temp;
+            l++; r--;
+        }
+    }
+}
