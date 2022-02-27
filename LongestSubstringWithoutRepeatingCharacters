@@ -1,0 +1,30 @@
+public class Solution {
+    public int LengthOfLongestSubstring(string s) {
+        if(string.IsNullOrEmpty(s)) return 0;
+        
+        int MaxSoFar = 0;
+        int l = 0; int r = 0;
+        Dictionary<char, int> map = new Dictionary<char, int>();
+        
+        while(r < s.Length)
+        {   
+            if(!map.ContainsKey(s[r]))
+                map.Add(s[r], r);
+            else
+            {
+                if(l <= map[s[r]])
+                {
+                    l = 1 + map[s[r]];
+                }
+                map[s[r]] = r;
+            }
+            
+            int len = r - l + 1;
+            if(MaxSoFar < len)
+                MaxSoFar = len;
+            
+            r++;
+        }   
+        return MaxSoFar;
+    }
+}
