@@ -1,0 +1,31 @@
+public class Solution {
+    public int[] SortedSquares(int[] nums) {
+        //Either initialize both l & r pointer at first non negative val
+        //Or take left as l and right as r and compare
+        
+        int[] res = new int[nums.Length];
+        int l = 0;
+        int r = nums.Length - 1;
+        int idx = r;
+        
+        while(l <= r)
+        {
+            int leftVal = nums[l]*nums[l];
+            int rightVal = nums[r]*nums[r];
+            
+            if(rightVal > leftVal)
+            {
+                res[idx] = rightVal;
+                r--;
+            }
+            else
+            {
+                res[idx] = leftVal;
+                l++;
+            }
+            
+            idx--;
+        }
+        return res;
+    }
+}
