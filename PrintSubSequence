@@ -1,0 +1,31 @@
+//Follow same pattern for subsequences, take/leave
+using System;
+using System.Collections.Generic;
+
+public class Test
+{
+	public static void Main()
+	{
+		// your code goes here
+		int[] arr = new int[5]{1,2,3,4,5};
+		List<int> lst = new List<int>();
+		
+		PrintSubSequence(arr, 0, lst);
+	}
+	
+	public static void PrintSubSequence(int[] arr, int idx, List<int> lst)
+	{
+		if(idx >= arr.Length)
+		{
+			foreach(int item in lst)
+				Console.Write(item + " ");
+			Console.WriteLine();
+			return;
+		}
+		
+		lst.Add(arr[idx]);
+		PrintSubSequence(arr, idx+1, lst);
+		lst.Remove(arr[idx]);
+		PrintSubSequence(arr, idx+1, lst);
+	}
+}
