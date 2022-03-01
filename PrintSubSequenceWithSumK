@@ -1,0 +1,33 @@
+using System;
+using System.Collections.Generic;
+
+public class Test
+{
+	public static void Main()
+	{
+		// your code goes here
+		int[] arr = new int[5]{1,2,3,4,5};
+		List<int> lst = new List<int>();
+		int sum = 6;
+		PrintSubSequenceWithSumK(arr, 0, lst, sum);
+	}
+	
+	public static void PrintSubSequenceWithSumK(int[] arr, int idx, List<int> lst, int sum)
+	{
+		if(idx >= arr.Length)
+		{
+			if(sum == 0)
+			{
+				foreach(int item in lst)
+					Console.Write(item + " ");
+				Console.WriteLine();
+			}
+			return;
+		}
+		
+		lst.Add(arr[idx]);
+		PrintSubSequenceWithSumK(arr, idx+1, lst, sum-arr[idx]);
+		lst.Remove(arr[idx]);
+		PrintSubSequenceWithSumK(arr, idx+1, lst, sum);
+	}
+}
