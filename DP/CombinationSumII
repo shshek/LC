@@ -1,0 +1,30 @@
+public class Solution {
+    public IList<IList<int>> CombinationSum2(int[] candidates, int target) {
+        Array.Sort(candidates);
+        IList<IList<int>> llist = new List<IList<int>>();
+        IList<int> list = new List<int>();
+        FindCombinationSum2(llist, list, 0, candidates, target);
+        return llist;
+    }
+    
+    public void FindCombinationSum2(IList<IList<int>> llist, IList<int> list, int idx, int[] arr, int target)
+    {
+        //Note here we did not add if(idx >= arr.Length)?
+        if(target == 0)
+        {
+            llist.Add(new List<int>(list));
+            return;
+        }
+        
+        for(int i = idx; i < arr.Length; i++)
+        {
+            if((i > idx) && (arr[i]==arr[i-1])) continue;
+            if(arr[i] > target) break;
+    
+            list.Add(arr[i]);
+            FindCombinationSum2(llist, list, i+1, arr, target-arr[i]);
+            list.Remove(arr[i]);
+            //FindCombinationSum2(llist, list, i+1, arr, target);
+        }
+    }
+}
