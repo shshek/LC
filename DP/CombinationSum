@@ -1,0 +1,32 @@
+public class Solution {
+    public IList<IList<int>> CombinationSum(int[] candidates, int target) {
+        List<IList<int>> llist = new List<IList<int>>();
+        IList<int> list = new List<int>();
+        FindCombinationSum(llist, list, 0, candidates, target);
+        return llist;
+    }
+    
+    public void FindCombinationSum(List<IList<int>> llist, IList<int> list, int idx, int[] arr, int target)
+    {
+        if(idx >= arr.Length)
+        {
+            if(target == 0)
+            {
+                // note to add new List here, do not just add list
+                llist.Add(new List<int>(list));
+                return;
+            }
+            return;
+        }
+        
+        // This step is important because we are not increasing index and me might end 
+        // up in infinite loop
+        if(arr[idx] <= target)
+        {
+            list.Add(arr[idx]);
+            FindCombinationSum(llist, list, idx, arr, target-arr[idx]);
+            list.Remove(arr[idx]);
+        }
+        FindCombinationSum(llist, list, idx+1, arr, target);
+    }
+}
