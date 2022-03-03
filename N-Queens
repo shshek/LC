@@ -1,0 +1,74 @@
+public class Solution {
+    public IList<IList<string>> SolveNQueens(int n) {
+        IList<IList<string>> llist = new List<IList<string>>();
+        
+        char[,] board = new char[n,n];
+        for(int i = 0; i < n; i++)
+            for(int j = 0; j < n; j++)
+                board[i,j] = '.';
+        
+        SolveNQueensHelper(llist, board, 0, n);
+        return llist;
+    }
+    
+    public List<string> ReturnBoardAsListString(char[,] board, int n)
+    {
+        List<string> list = new List<string>();
+        for(int i = 0; i < n; i++)
+        {
+            string sb = string.Empty;
+            for(int j = 0; j<n; j++)
+                sb += board[i,j];
+            list.Add(sb);
+        }
+        return list;
+    }
+    
+    public void SolveNQueensHelper(IList<IList<string>> llist, char[,] board, int col, int n)
+    {
+        if(col >= n)
+        {   
+            llist.Add(ReturnBoardAsListString(board, n));
+            return;
+        }
+        
+        for(int row = 0; row < n; row++)
+        {
+            if(IsSafe(board, row, col, n))
+            {
+                board[row,col] = 'Q';
+                SolveNQueensHelper(llist, board, col+1, n);
+                board[row,col] = '.';
+            }
+        }
+    }
+    
+    public bool IsSafe(char[,] board, int row, int col, int n)
+    {
+        int tempR = row;
+        int tempC = col;
+        
+        while(tempR >= 0 && tempC >= 0)
+        {
+            if(board[tempR,tempC] == 'Q') return false;
+            tempR--; tempC--;
+        }
+        
+        tempR = row;
+        tempC = col; 
+        
+        while(tempR < n && tempC >= 0)
+        {
+            if(board[tempR,tempC] == 'Q') return false;
+            tempR++; tempC--;
+        }
+        
+        while(col >= 0)
+        {
+            if(board[row,col] == 'Q') return false;
+            col--;
+        }
+        
+        return true;
+    }
+}
