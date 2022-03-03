@@ -1,0 +1,23 @@
+public class Solution {
+    public IList<IList<int>> SubsetsWithDup(int[] nums) {
+        IList<IList<int>> llist = new List<IList<int>>();
+        IList<int> list = new List<int>();
+        Array.Sort(nums);
+        FindSubsetsWithDup(llist, list, 0, nums);
+        return llist;
+    }
+    
+    public void FindSubsetsWithDup(IList<IList<int>> llist, IList<int> list, int idx, int[] arr)
+    {
+        // Note here we did not add a condition before adding because we need all
+        llist.Add(new List<int>(list));
+        
+        for(int i = idx; i < arr.Length; i++)
+        {
+            if(i != idx && arr[i] == arr[i-1])  continue;
+            list.Add(arr[i]);
+            FindSubsetsWithDup(llist, list, i+1, arr);
+            list.Remove(arr[i]);
+        }
+    }
+}
