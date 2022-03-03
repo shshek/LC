@@ -1,0 +1,31 @@
+public class Solution {
+    public IList<IList<int>> Permute(int[] nums) {
+        IList<IList<int>> llist = new List<IList<int>>();
+        IList<int> list = new List<int>();
+        bool[] freq = new bool[nums.Length];
+        
+        FindPermute(llist, list, 0, nums, freq);
+        return llist;
+    }
+    
+    public void FindPermute(IList<IList<int>> llist, IList<int> list, int idx, int[] nums, bool[] freq)
+    {
+        if(idx >= nums.Length)
+        {
+            llist.Add(new List<int>(list));
+            return;
+        }
+        
+        for(int i = 0; i < nums.Length; i++)
+        {
+            if(!freq[i])
+            {
+                freq[i] = true;
+                list.Add(nums[i]);
+                FindPermute(llist, list, idx+1, nums, freq);
+                list.Remove(nums[i]);
+                freq[i] = false;
+             }
+        }
+    }
+}
