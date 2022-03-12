@@ -1,0 +1,62 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     public int val;
+ *     public TreeNode left;
+ *     public TreeNode right;
+ *     public TreeNode(int val=0, TreeNode left=null, TreeNode right=null) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+public class Solution {
+    public IList<int> InorderTraversal(TreeNode root) {
+        //Inorder => LNR
+        IList<int> inOrder = new List<int>();
+        IList<int> inOrderIter = new List<int>();
+        
+        //InorderTraversalRecursive(root, inOrder);
+        InorderTraversalIterative(root, inOrderIter);
+        
+        //return inOrder;
+        return inOrderIter;
+    }
+    
+    public void InorderTraversalIterative(TreeNode root, IList<int> inOrderIter)
+    {
+        //If you see a node and it is not null, push it and move left
+        //If it is null, you add it/print it and move right
+        
+        if(root == null) return;
+        Stack<TreeNode> stack = new Stack<TreeNode>();
+        TreeNode node = root;
+        
+        while(true)
+        {
+            if(node != null)
+            {
+                stack.Push(node);
+                node = node.left;
+            }
+            else
+            {
+                if(stack.Count == 0) 
+                    break;
+                
+                node = stack.Pop();
+                inOrderIter.Add(node.val);
+                node = node.right;
+            }
+        }
+    }
+    
+    public void InorderTraversalRecursive(TreeNode root, IList<int> inOrder)
+    {
+        if(root == null) return;
+        InorderTraversalRecursive(root.left, inOrder);
+        inOrder.Add(root.val);
+        InorderTraversalRecursive(root.right, inOrder);   
+    }
+}
