@@ -1,0 +1,26 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     public int val;
+ *     public TreeNode left;
+ *     public TreeNode right;
+ *     public TreeNode(int val=0, TreeNode left=null, TreeNode right=null) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+public class Solution {
+    public int MinDepth(TreeNode root) {
+        //BFS would also behave better in some cases
+        if(root == null) return 0;
+        
+        int ld = MinDepth(root.left);
+        int rd = MinDepth(root.right);
+        
+        //This is for covering right/left skewed trees as one side always returns 0
+        if(ld == 0 || rd == 0) return ld + rd + 1;
+        return 1 + Math.Min(ld, rd);
+    }
+}
