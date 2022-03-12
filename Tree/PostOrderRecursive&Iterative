@@ -1,0 +1,66 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     public int val;
+ *     public TreeNode left;
+ *     public TreeNode right;
+ *     public TreeNode(int val=0, TreeNode left=null, TreeNode right=null) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+public class Solution {
+    public IList<int> PostorderTraversal(TreeNode root) {
+        IList<int> postOrder = new List<int>();
+        IList<int> postOrderIterS1 = new List<int>();
+        IList<int> postOrderIterS2 = new List<int>();
+        
+        PostorderTraversalRecursive(root, postOrder);
+        PostorderTraversalIterativeUsing1Stack(root, postOrderIterS1);
+        PostOrderTraversalIterativeUsing2Stack(root, postOrderIterS2);
+        
+        //return postOrder;
+        //return postOrderIterS1;
+        return postOrderIterS2;
+    }
+    
+    public void PostorderTraversalIterativeUsing1Stack(TreeNode root, IList<int> postOrderIterS1)
+    {
+           
+    }
+    
+    public void PostOrderTraversalIterativeUsing2Stack(TreeNode root, IList<int> postOrderIterS2)
+    {
+        if(root == null) return;
+        Stack<TreeNode> primary = new Stack<TreeNode>();
+        Stack<TreeNode> secondary = new Stack<TreeNode>();
+        TreeNode node = root;
+        
+        primary.Push(node);
+        while(primary.Count != 0)
+        {
+            node = primary.Pop();
+            secondary.Push(node);
+            if(node.left != null)
+                primary.Push(node.left);
+            if(node.right != null)
+                primary.Push(node.right);
+        }
+        
+        while(secondary.Count != 0)
+        {
+            postOrderIterS2.Add(secondary.Pop().val);
+        }
+    }
+    
+    public void PostorderTraversalRecursive(TreeNode root, IList<int> postOrder)
+    {
+        if(root == null) return;
+        
+        PostorderTraversalRecursive(root.left, postOrder);
+        PostorderTraversalRecursive(root.right, postOrder);
+        postOrder.Add(root.val);
+    }
+}
