@@ -1,0 +1,42 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     public int val;
+ *     public TreeNode left;
+ *     public TreeNode right;
+ *     public TreeNode(int val=0, TreeNode left=null, TreeNode right=null) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+public class Solution {
+    public IList<IList<int>> PathSum(TreeNode root, int targetSum) {
+        IList<IList<int>> llist = new List<IList<int>>();
+        IList<int> list = new List<int>();
+        
+        if(root == null) return llist;
+        GetAllPathSumPath(root, targetSum, list, llist);
+        return llist;
+    }
+    
+    public void GetAllPathSumPath(TreeNode root, int targetSum, IList<int> list, IList<IList<int>> llist)
+    {
+        if(root == null) return;
+        
+        list.Add(root.val);
+        if(root.left == null && root.right == null)
+        {
+            if(targetSum - root.val == 0)
+            {
+                //We have got one path, add it to the global
+                llist.Add(new List<int>(list));
+            }
+        }
+        
+        GetAllPathSumPath(root.left, targetSum - root.val, list, llist);
+        GetAllPathSumPath(root.right, targetSum - root.val, list, llist);
+        list.RemoveAt(list.Count-1);
+    }
+}
