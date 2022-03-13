@@ -1,0 +1,37 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     public int val;
+ *     public TreeNode left;
+ *     public TreeNode right;
+ *     public TreeNode(int val=0, TreeNode left=null, TreeNode right=null) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+public class Solution {
+    public int MaxPathSum(TreeNode root) {
+        if(root == null) return 0;
+        int maxSum = root.val;
+        
+        MaxPathSumRecursive(root, ref maxSum);
+        return maxSum;
+    }
+    
+    public int MaxPathSumRecursive(TreeNode root, ref int maxSum)
+    {
+        if(root == null) return 0;
+        
+        int lh = MaxPathSumRecursive(root.left, ref maxSum);
+        int rh = MaxPathSumRecursive(root.right, ref maxSum);
+        
+        //Put this to handle negative cases
+        if(lh < 0) lh = 0;
+        if(rh < 0) rh = 0;
+        
+        maxSum = Math.Max(maxSum, root.val + lh + rh);
+        return root.val + Math.Max(lh, rh);
+    }
+}
