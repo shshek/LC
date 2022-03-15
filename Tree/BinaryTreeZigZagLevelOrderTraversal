@@ -1,0 +1,58 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     public int val;
+ *     public TreeNode left;
+ *     public TreeNode right;
+ *     public TreeNode(int val=0, TreeNode left=null, TreeNode right=null) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+public class Solution {
+    public IList<IList<int>> ZigzagLevelOrder(TreeNode root) {
+        IList<IList<int>> llist = new List<IList<int>>();
+        if(root == null) return llist;
+        
+        GetZigZagLevelOrder(root, llist);
+        return llist;
+    }
+    
+    public void GetZigZagLevelOrder(TreeNode root, IList<IList<int>> llist)
+    {
+        bool rightToLeft = false;
+        Queue<TreeNode> q = new Queue<TreeNode>();
+        
+        q.Enqueue(root);
+        
+        while(q.Count != 0)
+        {
+            int numElement = q.Count;
+            IList<int> list = new List<int>(new int[numElement]);
+            
+            for(int i = 0; i < numElement; i++)
+            {
+                TreeNode temp = q.Dequeue();
+                
+                if(temp.left != null)
+                    q.Enqueue(temp.left);
+                if(temp.right != null)
+                    q.Enqueue(temp.right);
+                
+                
+                if(rightToLeft)
+                {
+                    list[numElement - i - 1] = temp.val;
+                    //Console.WriteLine(list[numElement-1-i]);
+                }
+                else
+                    list[i] = temp.val;
+            }
+            
+            rightToLeft = !rightToLeft;
+            llist.Add(list);
+        }
+    }
+}
