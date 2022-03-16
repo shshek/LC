@@ -1,0 +1,3 @@
+In this we will use the same concept as Vertical Order Traversal 
+1. In Top View, similar to vertical, we will take the first enrty of the node for that vertical
+2. In Bottom view, similar to vertical, we will take the last entry of the node for that vertical
