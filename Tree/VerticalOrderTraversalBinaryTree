@@ -1,0 +1,76 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     public int val;
+ *     public TreeNode left;
+ *     public TreeNode right;
+ *     public TreeNode(int val=0, TreeNode left=null, TreeNode right=null) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+public class Solution {
+    public class Node
+    {
+        public TreeNode treeNode;
+        public int x;
+        public int y;
+        public Node(TreeNode node, int x, int y)
+        {
+            this.treeNode = node;
+            this.x = x;
+            this.y = y;
+        }
+    }
+    
+    public IList<IList<int>> VerticalTraversal(TreeNode root) {
+        IList<IList<int>> llist = new List<IList<int>>();
+        if(root == null) return llist;
+        
+        Dictionary<int, List<Node>> dict = new Dictionary<int, List<Node>>();
+        Queue<Node> q = new Queue<Node>();
+        int minX = 0, maxX = 0;
+        
+        q.Enqueue(new Node(root, 0 , 0));
+        
+        while(q.Count != 0)
+        {
+            Node temp = q.Dequeue();
+            minX = Math.Min(minX, temp.x);
+            maxX = Math.Max(maxX, temp.x);
+            
+            if(!dict.ContainsKey(temp.x))
+            {
+                dict.Add(temp.x, new List<Node>(){temp});    
+            }
+            else
+                dict[temp.x].Add(temp);
+            
+            if(temp.treeNode.left != null)
+                q.Enqueue(new Node(temp.treeNode.left, temp.x-1, temp.y+1));
+
+            if(temp.treeNode.right != null)
+                q.Enqueue(new Node(temp.treeNode.right, temp.x+1, temp.y+1));
+        }
+        
+        for(int i = minX; i <= maxX; i++)
+        {
+            var lst = dict[i];
+            lst.Sort((node1, node2) => {
+                if(node1.y == node2.y)
+                    return node1.treeNode.val.CompareTo(node2.treeNode.val);
+                else
+                    return node1.y.CompareTo(node2.y);
+            });
+            
+            List<int> temp = new List<int>();
+            foreach(var node in lst)
+                temp.Add(node.treeNode.val);
+            
+            llist.Add(temp);
+        }
+        return llist;
+    }
+}
