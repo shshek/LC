@@ -1,0 +1,53 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     public int val;
+ *     public TreeNode left;
+ *     public TreeNode right;
+ *     public TreeNode(int val=0, TreeNode left=null, TreeNode right=null) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+public class Solution {
+    //The idea is width is defined as the length between two extreme nodes on each level
+    //The reason to subtract min at each level is to avoid skewed tree issue.
+    
+    public int WidthOfBinaryTree(TreeNode root) {
+        if(root == null) return 0;
+        Queue<Tuple<TreeNode, int>> q = new Queue<Tuple<TreeNode, int>>();
+        int maxWidth = 0;
+        
+        q.Enqueue(Tuple.Create(root, 0));
+        while(q.Count != 0)
+        {
+            int size = q.Count;
+            int min = q.Peek().Item2;
+            int firstNodeIdx = 0;
+            int lastNodeIdx = 0;
+            
+            for(int i = 0; i < size; i++)
+            {
+                TreeNode node = q.Peek().Item1;
+                int minOfThisLevel = q.Peek().Item2-min;
+                
+                q.Dequeue();
+                
+                if(i == 0)
+                    firstNodeIdx = minOfThisLevel;
+                if(i == size-1)
+                    lastNodeIdx = minOfThisLevel;
+                
+                if(node.left != null) 
+                    q.Enqueue(Tuple.Create(node.left, 2*minOfThisLevel + 1));
+                
+                if(node.right != null) 
+                    q.Enqueue(Tuple.Create(node.right, 2*minOfThisLevel + 2));   
+            }
+            maxWidth = Math.Max(maxWidth, lastNodeIdx - firstNodeIdx + 1);
+        }
+        return maxWidth;
+    }
+}
