@@ -1,0 +1,35 @@
+//This problem does not exist on LeetCode
+//Solution is O(N), the problem states that modify a binary tree (can only increment node value not decrement) so that each node is
+//a sum of its left and right child value
+class Solution
+{
+  public static void changeTree(TreeNode root)
+  {
+      if(root == null)
+        return;
+        
+      //Check the left and right and compare with node
+      int leftVal = root.left ? root.left.val : 0;
+      int rightVal = root.right ? root.right.val : 0;
+      
+      if(root < (leftVal + rightVal))
+          root.val = leftVal + rightVal;
+      else
+      {
+          //root val is larger so use that to set left and right
+          if(root.left != null) root.left.val = root.val;
+          if(root.right != null) root.right.val = root.val;
+      }
+      
+      changeTree(root.left);
+      changeTree(root.right);
+      
+      //Re-update after returning
+      int total = 0;
+      if(root.left != null) total += root.left.val;
+      if(root.right != null) total += root.right.val;
+      //Do not update leaf nodes
+      if(root.left != null || root.right != null) root.val = total;
+  }
+}
+
