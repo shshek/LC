@@ -1,0 +1,88 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     public int val;
+ *     public TreeNode left;
+ *     public TreeNode right;
+ *     public TreeNode(int x) { val = x; }
+ * }
+ */
+public class Solution {
+    public IList<int> DistanceK(TreeNode root, TreeNode target, int k) {
+        //Find all nodes at a distance of k from target node
+        //Thought is to store parents of each node so that we can traverse
+        
+        Dictionary<TreeNode, TreeNode> parentChildDict = new Dictionary<TreeNode, TreeNode>();
+        FillParentChildMap(root, parentChildDict);
+        
+        Queue<TreeNode> q = new Queue<TreeNode>();
+        Dictionary<TreeNode, bool> visited = new Dictionary<TreeNode, bool>();
+        
+        q.Enqueue(target);
+        int counter = 0;
+        visited[target] = true;
+        
+        while(q.Count != 0)
+        {
+            if(counter == k)
+                break;
+            int size = q.Count;
+            for(int i = 0; i < size; i++)
+            {
+                //Dequeue inside the loop is an IMP step here
+                TreeNode temp = q.Dequeue();
+                //Travel up, left & right
+                if(temp.left != null && !visited.ContainsKey(temp.left))
+                {
+                    q.Enqueue(temp.left);
+                    visited[temp.left] = true;
+                }
+                
+                if(temp.right != null && !visited.ContainsKey(temp.right))
+                {
+                    q.Enqueue(temp.right);
+                    visited[temp.right] = true;
+                }
+                    
+                if(parentChildDict.ContainsKey(temp) && !visited.ContainsKey(parentChildDict[temp]))
+                {
+                    q.Enqueue(parentChildDict[temp]);
+                    visited[parentChildDict[temp]] = true;
+                }     
+            }
+            counter++;
+        }
+        
+        IList<int> list = new List<int>();
+        while(q.Count != 0)
+        {
+            list.Add(q.Dequeue().val);
+        }
+        
+        return list;
+    }
+    
+    public void FillParentChildMap(TreeNode root, Dictionary<TreeNode, TreeNode> parentChildDict)
+    {
+        if(root == null) return;
+        Queue<TreeNode> q = new Queue<TreeNode>();
+        TreeNode node = root;
+        q.Enqueue(node);
+        
+        while(q.Count != 0)
+        {
+            TreeNode temp = q.Dequeue();
+            if(temp.left != null)
+            {
+                parentChildDict.Add(temp.left, temp);
+                q.Enqueue(temp.left);
+            }
+                
+            if(temp.right != null)
+            {
+                parentChildDict.Add(temp.right, temp);
+                q.Enqueue(temp.right);
+            }
+        }
+    }
+}
