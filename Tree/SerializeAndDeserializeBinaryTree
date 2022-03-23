@@ -1,0 +1,76 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     public int val;
+ *     public TreeNode left;
+ *     public TreeNode right;
+ *     public TreeNode(int x) { val = x; }
+ * }
+ */
+public class Codec {
+
+    // Encodes a tree to a single string.
+    public string serialize(TreeNode root) {
+        string serial = string.Empty;
+        
+        if(root == null)
+            return serial;
+        
+        Queue<TreeNode> q = new Queue<TreeNode>();
+        q.Enqueue(root);
+        
+        while(q.Count != 0)
+        {
+            TreeNode dq = q.Dequeue();
+            serial += dq == null ? "#," : dq.val.ToString() + ",";
+            
+            if(dq != null)
+            {
+                q.Enqueue(dq.left);
+                q.Enqueue(dq.right);
+            }
+        }
+        string str = serial.Remove(serial.Length-1, 1);
+        return str;
+    }
+
+    // Decodes your encoded data to tree.
+    public TreeNode deserialize(string data) {
+        if(string.IsNullOrEmpty(data)) 
+            return null;
+        
+        string[] arr = data.Split(',');
+        
+        TreeNode root = new TreeNode(int.Parse(arr[0]));
+        Queue<TreeNode> q = new Queue<TreeNode>();
+        q.Enqueue(root);
+        int idx = 0;
+        
+        while(q.Count != 0)
+        {
+            TreeNode node = q.Dequeue();
+            
+            if(arr[++idx] != "#")
+            {
+                node.left = new TreeNode(int.Parse(arr[idx]));
+                q.Enqueue(node.left);
+            }
+            else
+                node.left = null;
+            
+            if(arr[++idx] != "#")
+            {
+                node.right = new TreeNode(int.Parse(arr[idx]));
+                q.Enqueue(node.right);
+            }
+            else
+                node.right = null;
+        }
+        return root;
+    }
+}
+
+// Your Codec object will be instantiated and called as such:
+// Codec ser = new Codec();
+// Codec deser = new Codec();
+// TreeNode ans = deser.deserialize(ser.serialize(root));
