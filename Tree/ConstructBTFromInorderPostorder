@@ -1,0 +1,46 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     public int val;
+ *     public TreeNode left;
+ *     public TreeNode right;
+ *     public TreeNode(int val=0, TreeNode left=null, TreeNode right=null) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+public class Solution {
+    public TreeNode BuildTree(int[] inorder, int[] postorder) {
+        /* You can never construct a unique BT using preOrder & postOrder
+        You need inOrder to construct a unique BT
+        */
+        
+        //Build a map to get indices instead of traversing the array each time
+        Dictionary<int, int> dict = new Dictionary<int, int>();
+        for(int i = 0; i < inorder.Length; i++)
+        {
+            dict[inorder[i]] = i;
+        }
+        
+        TreeNode root = BuildTree(postorder, 0, postorder.Length-1, inorder, 0, inorder.Length-1, dict);
+        return root;
+    }
+    
+    public TreeNode BuildTree(int[] postorder, int startPost, int endPost, int[] inorder, int startIn, int endIn, Dictionary<int, int> dict) {
+        if(startPost > endPost || startIn > endIn)
+            return null;
+        
+        TreeNode node = new TreeNode(postorder[endPost]);
+        
+        //Be mindful if indices, draw and calculate
+        int idx = dict[node.val];
+        int numNodesLeft = idx - startIn;
+        
+        node.left = BuildTree(postorder, startPost, startPost + numNodesLeft - 1, inorder, startIn, idx - 1, dict);
+        node.right = BuildTree(postorder, startPost + numNodesLeft, endPost-1, inorder, idx+1, endIn, dict);
+            
+        return node;
+    }
+}
