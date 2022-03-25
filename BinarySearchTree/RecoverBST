@@ -1,0 +1,64 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     public int val;
+ *     public TreeNode left;
+ *     public TreeNode right;
+ *     public TreeNode(int val=0, TreeNode left=null, TreeNode right=null) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+public class Solution {
+    //We may not need to store the entire node's values and can work with few variables
+    private TreeNode prev;
+    private TreeNode first;
+    private TreeNode middle;
+    private TreeNode last;
+    
+    public void RecoverTree(TreeNode root) {
+        if(root == null)
+            return;
+        first = middle = last = null;
+        
+        prev = new TreeNode(int.MinValue);
+        InOrderTraversal(root);
+        
+        if(first != null && last != null)
+        {
+            int temp = last.val;
+            last.val = first.val;
+            first.val = temp;
+        }
+        else if(first != null && middle != null)
+        {
+            int temp = middle.val;
+            middle.val = first.val;
+            first.val = temp;
+        }
+    }
+    
+    public void InOrderTraversal(TreeNode root)
+    {
+        if(root == null)
+            return;
+        InOrderTraversal(root.left);
+        
+        if(prev != null && prev.val > root.val)
+        {
+            //Storing both first and last for adjacent and non-adjacent swaps
+            if(first == null)
+            {
+                first = prev;
+                middle = root;
+            }
+            else
+                last = root;
+        }
+        
+        prev = root;
+        InOrderTraversal(root.right);
+    }
+}
