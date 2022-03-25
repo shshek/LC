@@ -1,0 +1,79 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     public int val;
+ *     public TreeNode left;
+ *     public TreeNode right;
+ *     public TreeNode(int val=0, TreeNode left=null, TreeNode right=null) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+public class Solution {
+    public bool FindTarget(TreeNode root, int k) {
+        if(root == null)
+            return false;
+        
+        BSTIterator left = new BSTIterator(root, false);
+        BSTIterator right = new BSTIterator(root, true);
+        
+        int l = left.Next();
+        int r = right.Next();
+        
+        while(l < r)
+        {
+            int sum = l + r;
+            if(sum == k)
+                return true;
+            else if(sum > k)
+            {
+                r = right.Next();
+            }
+            else
+                l = left.Next();
+        }
+        return false;
+    }
+}
+
+public class BSTIterator
+{
+    Stack<TreeNode> stack = new Stack<TreeNode>();
+    bool isReverse = false;
+    
+    public BSTIterator(TreeNode root, bool isReverse)
+    {
+        //Added this as had same name and wasn't getting updated
+        this.isReverse = isReverse;
+        pushAll(root);
+    }
+    
+    public bool hasNext()
+    {
+        return (stack.Count == 0) ? false : true;
+    }
+    
+    public int Next()
+    {
+        TreeNode node = stack.Pop();
+        if(isReverse)
+            pushAll(node.left);
+        else
+            pushAll(node.right);
+        return node.val;
+    }
+    
+    public void pushAll(TreeNode node)
+    {
+        while(node != null)
+        {
+            stack.Push(node);
+            if(isReverse)
+                node = node.right;
+            else
+                node = node.left;
+        }
+    }
+}
