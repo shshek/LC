@@ -13,6 +13,7 @@
  */
 public class Solution {
     public int DiameterOfBinaryTree(TreeNode root) {
+        //Diameter is not the width, this is the longest path between any two nodes (not necessarily root)
         //Diameter is the max heigh diff so instead of calculating height of each node 
         //and then max, inject max while height calc
         
