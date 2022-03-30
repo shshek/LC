@@ -1,0 +1,85 @@
+// { Driver Code Starts
+// Initial Template for C#
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace DriverCode {
+
+class GFG {
+    static void Main(string[] args) {
+        int testcases; // Taking testcase as input
+        testcases = Convert.ToInt32(Console.ReadLine());
+        while (testcases-- > 0) // Looping through all testcases
+        {
+            var ip = Console.ReadLine().Trim().Split(' ');
+            int V = int.Parse(ip[0]);
+            int E = int.Parse(ip[1]);
+            List<List<int>> adj = new List<List<int>>();
+            for (int i = 0; i < V; i++) {
+                adj.Add(new List<int>());
+            }
+            for (int i = 0; i < E; i++) {
+                ip = Console.ReadLine().Trim().Split(' ');
+                int u = int.Parse(ip[0]);
+                int v = int.Parse(ip[1]);
+                adj[u].Add(v);
+                adj[v].Add(u);
+            }
+            Solution obj = new Solution();
+            var res = obj.isCycle(V, adj);
+            Console.WriteLine(res ? 1 : 0);
+        }
+    }
+}
+}// } Driver Code Ends
+
+
+// User function Template for C#
+
+class Solution {
+    // Function to detect cycle in an undirected graph.
+  public
+    bool isCycle(int V, List<List<int>> adj) {
+        // Code here
+        bool[] visited = new bool[V];
+        
+        for(int i = 0; i < V; i++)
+        {
+            visited[i] = false;
+        }
+        
+        for(int i = 0; i < V; i++)
+        {
+            if(visited[i] == false)
+            {
+                if(isCycleHelper(i, -1, adj, visited))
+                    return true;
+            }
+        }
+        return false;
+    }
+    
+    bool isCycleHelper(int i, int parent, List<List<int>> adj, bool[] visited)
+    {
+        visited[i] = true;
+        foreach(int conn in adj[i])
+        {
+            if(visited[conn] == false)
+            {
+                //Here you cannot directly write return isCycleHelper, you have to return based on the value
+                if(isCycleHelper(conn, i, adj, visited))
+                    return true;
+            }
+            else
+            {
+                if(parent != conn)
+                    return true;
+            }
+        }
+        return false;
+    }
+}
