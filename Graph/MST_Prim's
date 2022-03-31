@@ -1,0 +1,140 @@
+// { Driver Code Starts
+//Initial Template for C#
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace DriverCode
+{
+
+    class GFG
+    {
+        static void Main(string[] args)
+        {
+            int testcases;// Taking testcase as input
+            testcases = Convert.ToInt32(Console.ReadLine());
+            while (testcases-- > 0)// Looping through all testcases
+            {
+                var ip = Console.ReadLine().Trim().Split(' ');
+                int V = int.Parse(ip[0]);
+                int E = int.Parse(ip[1]);
+                List<List<List<int>>> adj = new List<List<List<int>>>();
+                for (int i = 0; i < V; i++)
+                {
+                    adj.Add(new List<List<int>>());
+                }
+                for (int i = 0; i < E; i++)
+                {
+                    ip = Console.ReadLine().Trim().Split(' ');
+                    int u = int.Parse(ip[0]);
+                    int v = int.Parse(ip[1]);
+                    int w = int.Parse(ip[2]);
+
+                    adj[u].Add(new List<int>() { v, w });
+                    adj[v].Add(new List<int>() { u, w });
+                }
+                Solution obj = new Solution();
+                var res = obj.spanningTree(V, ref adj);
+                Console.WriteLine(res);
+            }
+        }
+    }
+}
+// } Driver Code Ends
+
+
+//User function Template for C#
+
+class Solution
+{
+    class PriorityQueue
+    {
+        public LinkedList<Tuple<int,int>> Entries { get; } = new LinkedList<Tuple<int,int>>();
+
+        public int Count()
+        {
+            return Entries.Count;
+        }
+
+        public Tuple<int,int> Dequeue()
+        {
+            if (Entries.Any())
+            {
+                var itemTobeRemoved = Entries.First.Value;
+                Entries.RemoveFirst();
+                return itemTobeRemoved;
+            }
+
+            return default(Tuple<int,int>);
+        }
+
+        public void Enqueue(Tuple<int,int> entry)
+        {
+            var value = new LinkedListNode<Tuple<int,int>>(entry);
+            if (Entries.First == null)
+            {
+                Entries.AddFirst(value);
+            }
+            else
+            {
+                var ptr = Entries.First;
+                while (ptr.Next != null && ptr.Value.Item1 < entry.Item1)
+                {
+                    ptr = ptr.Next;
+                }
+
+                if (ptr.Value.Item1 <= entry.Item1)
+                {
+                    Entries.AddAfter(ptr, value);
+                }
+                else
+                {
+                    Entries.AddBefore(ptr, value);
+                }
+            }
+        }
+    }
+    
+    //Function to find sum of weights of edges of the Minimum Spanning Tree.
+    public int spanningTree(int V, ref List<List<List<int>>> adj)
+    {
+        // code here
+        PriorityQueue pq = new PriorityQueue();
+        int[] distance = new int[V];
+        bool[] includedMST = new bool[V];
+        
+        for(int i = 0; i < V; i++)
+        {
+            distance[i] = int.MaxValue;
+            includedMST[i] = false;
+        }
+        
+        distance[0] = 0;
+        pq.Enqueue(new Tuple<int,int>(0, 0));
+        
+        while(pq.Count() != 0)
+        {
+            Tuple<int,int> val = pq.Dequeue();
+            includedMST[val.Item2] = true;
+            
+            foreach(List<int> lst in adj[val.Item2])
+            {
+                if(includedMST[lst[0]] == false && distance[lst[0]] > lst[1])
+                {
+                    distance[lst[0]] = lst[1];
+                    pq.Enqueue(new Tuple<int,int>(distance[lst[0]], lst[0]));
+                }
+            }
+        }
+        
+        int sum = 0;
+        
+        for(int i = 0; i < V; i++)
+            sum = sum + distance[i];
+            
+        return sum;
+    }
+}
