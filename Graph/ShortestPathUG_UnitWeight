@@ -1,0 +1,88 @@
+// { Driver Code Starts
+//Initial Template for C#
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace DriverCode
+{
+
+    class GFG
+    {
+        static void Main(string[] args)
+        {
+            int testcases;// Taking testcase as input
+            testcases = Convert.ToInt32(Console.ReadLine());
+            while (testcases-- > 0)// Looping through all testcases
+            {
+                var ip = Console.ReadLine().Trim().Split(' ');
+                int V = int.Parse(ip[0]);
+                int E = int.Parse(ip[1]);
+                List<List<List<int>>> adj = new List<List<List<int>>>();
+                for (int i = 0; i < V; i++)
+                {
+                    adj.Add(new List<List<int>>());
+                }
+                for (int i = 0; i < E; i++)
+                {
+                    ip = Console.ReadLine().Trim().Split(' ');
+                    int u = int.Parse(ip[0]);
+                    int v = int.Parse(ip[1]);
+                    int w = int.Parse(ip[2]);
+
+                    adj[u].Add(new List<int>() { v, w });
+                    adj[v].Add(new List<int>() { u, w });
+                }
+                int S = Convert.ToInt32(Console.ReadLine());
+                Solution obj = new Solution();
+                var res = obj.dijkstra(V, ref adj, S);
+                foreach (int i in res)
+                {
+                    Console.Write(i + " ");
+                }
+                Console.WriteLine();
+            }
+        }
+    }
+}
+// } Driver Code Ends
+
+
+//User function Template for C#
+
+class Solution
+{
+    //Function to find the shortest distance of all the vertices
+    //from the source vertex S.
+    public List<int> shortestPathUGUnitWeight(int V, List<List<int>> adj, int S)
+    {
+        //code here
+        int[] distance = new int[V];
+        for(int i = 0; i < V; i++)
+        {
+            distance[i] = int.MaxValue;
+        }
+        
+        distance[S] = 0;
+        Queue<int> q = new Queue<int>();
+        q.Enqueue(S);
+        
+        while(q.Count != 0)
+        {
+            int temp = q.Dequeue();
+            foreach(int conn in adj[temp])
+            {
+                if(distance[conn] > 1 + distance[temp])
+                {
+                    distance[conn] = 1 + distance[temp];
+                    //Only EnQ when this is satisfied as this is UG graph
+                    q.Enqueue(conn);
+                }
+            }
+        }
+    }
+}
+
