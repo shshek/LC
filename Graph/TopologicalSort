@@ -1,0 +1,107 @@
+// { Driver Code Starts
+//Initial Template for C#
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace DriverCode
+{
+
+    class GFG
+    {
+        bool check(int V, List<int> res, List<List<int>> adj)
+        {
+            if(V!=res.Count) return false;
+            List<int> map = new List<int>();
+            for (int i = 0; i < V+1; i++) map.Add(-1);
+            for (int i = 0; i < V; i++)
+            {
+                map[res[i]] = i;
+            }
+            for (int i = 0; i < V; i++)
+            {
+                foreach (int v in adj[i])
+                {
+                    if (map[i] > map[v]) return false;
+                }
+            }
+            return true;
+        }
+        static void Main(string[] args)
+        {
+            GFG g = new GFG();
+            int testcases;// Taking testcase as input
+            testcases = Convert.ToInt32(Console.ReadLine());
+            while (testcases-- > 0)// Looping through all testcases
+            {
+                var ip = Console.ReadLine().Trim().Split(' ');
+                int E = int.Parse(ip[0]);
+                int V = int.Parse(ip[1]);
+                List<List<int>> adj = new List<List<int>>();
+                for (int i = 0; i < V; i++)
+                {
+                    adj.Add(new List<int>());
+                }
+                for (int i = 0; i < E; i++)
+                {
+                    ip = Console.ReadLine().Trim().Split(' ');
+                    int u = int.Parse(ip[0]);
+                    int v = int.Parse(ip[1]);
+                    adj[u].Add(v);
+                }
+                Solution obj = new Solution();
+                var res = obj.topoSort(V, adj);
+                Console.WriteLine(g.check(V, res, adj) ? 1 : 0);
+            }
+        }
+    }
+}
+// } Driver Code Ends
+
+
+//User function Template for C#
+
+class Solution
+{
+    //Function to return list containing vertices in Topological order. 
+    public List<int> topoSort(int V, List<List<int>> adj)
+    {
+        //code here
+        bool[] visited = new bool[V];
+        Stack<int> stk = new Stack<int>();
+        
+        for(int i = 0; i < V; i++)
+        {
+            visited[i] = false;
+        }
+        
+        for(int i = 0; i < V; i++)
+        {
+            if(visited[i] == false)
+            {
+                dfs(i, adj, visited, stk);
+            }
+        }
+        
+        List<int> result = new List<int>();
+        while(stk.Count != 0)
+        {
+            result.Add(stk.Pop());
+        }
+        return result;
+    }
+    
+    public void dfs(int i, List<List<int>> adj, bool[] visited, Stack<int> stk)
+    {
+        visited[i] = true;
+        foreach(int conn in adj[i])
+        {
+            if(visited[conn] == false)
+                dfs(conn, adj, visited, stk);
+        }
+        stk.Push(i);
+    }
+}
