@@ -1,0 +1,51 @@
+public class Solution {
+    public void NextPermutation(int[] nums) {
+        if(nums == null || nums.Length == 1)
+            return;
+        
+        int size = nums.Length;
+        int idxS = -1;
+        int idxE = -1;
+        
+        for(int i = size-2; i >= 0; i--)
+        {
+            if(nums[i] < nums[i+1])
+            {
+                idxS = i;
+                break;
+            }
+        }
+        
+        if(idxS >= 0)
+        {
+            for(int i = size -1; i >= 0; i--)
+            {
+                if(nums[i] > nums[idxS])
+                {
+                    idxE = i;
+                    break;
+                }
+            }
+            swap(nums, idxS, idxE);
+        }
+        
+        reverse(nums, idxS + 1, nums.Length-1);
+    }
+    
+    public void swap(int[] nums, int start, int end)
+    {
+        int temp = nums[start];
+        nums[start] = nums[end];
+        nums[end] = temp;
+    }
+    
+    public void reverse(int[] nums, int start, int end)
+    {
+        while(start <= end)
+        {
+            swap(nums, start, end);
+            start++;
+            end--;
+        }
+    }
+}
