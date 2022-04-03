@@ -1,0 +1,42 @@
+using System;
+
+public class Test
+{
+	public static void Main()
+	{
+		//code for missing and repeating numbers using XOR
+		int[] arr = new int[]{7,3,4,5,5,6,2};
+		
+		int xorArr = 0;
+		
+		int x = 0; //missing, repeating
+		int y = 0; //repeating, missing
+		
+		for(int i = 0; i < arr.Length; i++)
+			xorArr = xorArr ^ arr[i];
+		
+		for(int i = 1; i <= arr.Length; i++)
+			xorArr = xorArr ^ i;
+		
+		//Now divide it into two sets based on the set bit
+		int setBit = xorArr & ~(xorArr-1);
+		
+		for(int i = 0; i < arr.Length; i++)
+		{
+			if((arr[i] & setBit) == 0)
+				x = x ^ arr[i];
+			else
+				y = y ^ arr[i];
+		}
+		
+		for(int i = 1; i <= arr.Length; i++)
+		{
+			if((i & setBit) == 0)
+				x = x ^ i;
+			else
+				y = y ^ i;
+		}
+		
+		Console.WriteLine("X is : " + x + "\nY is : " + y);
+	}
+}
