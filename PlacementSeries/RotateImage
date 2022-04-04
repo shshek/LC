@@ -1,0 +1,36 @@
+public class Solution {
+    public void Rotate(int[][] matrix) {
+        //Logic is to first find the transpose of the matrix
+        //row=>columns & vice-verse
+        //and then reverse each row
+        
+        for(int i = 0; i < matrix.Length; i++)
+        {
+            for(int j = i; j < matrix[0].Length; j++)
+            {
+                int temp = matrix[i][j];
+                matrix[i][j] = matrix[j][i];
+                matrix[j][i] = temp;
+            }
+        }
+        
+        //Reverse
+        for(int i = 0; i < matrix.Length; i++)
+        {
+            reverse(matrix, i, matrix[0].Length-1);
+        }
+    }
+    
+    public void reverse(int[][] matrix, int rowNum, int cols)
+    {
+        int colIdx = 0;
+        
+        while(colIdx <= (int)cols/2)
+        {
+            int temp = matrix[rowNum][colIdx];
+            matrix[rowNum][colIdx] = matrix[rowNum][cols-colIdx];
+            matrix[rowNum][cols-colIdx] = temp;
+            colIdx++;
+        }
+    }
+}
