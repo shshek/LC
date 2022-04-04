@@ -6,6 +6,7 @@ public class Solution {
         
         for(int i = 0; i < matrix.Length; i++)
         {
+        //Here j starts from i because we are not taking additional space
             for(int j = i; j < matrix[0].Length; j++)
             {
                 int temp = matrix[i][j];
