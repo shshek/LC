@@ -1,0 +1,58 @@
+using System;
+using System.Collections.Generic;
+
+public class Test
+{
+	public static void Main()
+	{
+		// your code goes here
+		char[,] jumble = new char[,]{
+				{'c', 'c', 'x', 't', 'i', 'b'},
+                {'c', 'c', 'a', 't', 'n', 'i'},
+                {'a', 'c', 'n', 'n', 't', 't'},
+                {'t', 'c', 's', 'i', 'p', 't'},
+                {'a', 'o', 'o', 'o', 'a', 'a'},
+                {'o', 'a', 'a', 'a', 'o', 'o'},
+                {'k', 'a', 'i', 'c', 'k', 'i'}};
+    	List<string> wordsToFind = new List<string>(){"cccc", "s", "bit", "aoi", "ki", "aaa", "ooo", "shshek"};
+    	foreach(string s in wordsToFind)
+    	{
+    		if(findWord(jumble, s))
+    			Console.WriteLine("Word " + s + " found!");
+    		else
+    			Console.WriteLine("Word " + s + " not found!");
+    	}
+	}
+	
+	public static bool findWord(char[,] jumble, string word)
+	{
+		for(int i = 0; i < jumble.GetLength(0); i++)
+		{
+			for(int j = 0; j < jumble.GetLength(1); j++)
+			{
+				if(jumble[i,j] == word[0] && dfs(jumble, i, j, 0, word))
+					return true;
+			}
+		}
+		return false;
+	}
+	
+	public static bool dfs(char[,] jumble, int i, int j, int count, string word)
+	{
+		if(count == word.Length)
+			return true;
+		
+		if(i < 0 || i >= jumble.GetLength(0) || j < 0 || j >= jumble.GetLength(1) || jumble[i,j] != word[count])
+			return false;
+			
+		char temp = jumble[i,j];
+		jumble[i,j] = '*';
+		
+		bool found = dfs(jumble, i+1, j, count+1, word) 
+					|| dfs(jumble, i, j+1, count+1, word);
+		
+		jumble[i,j] = temp;
+		
+		return found;
+	}
+}
